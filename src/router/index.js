@@ -5,6 +5,7 @@ Vue.use(Router)
 
 const login = r => require.ensure([], () => r(require('@/page/login')), 'login');
 const home = r => require.ensure([], () => r(require('@/page/home')), 'home');
+const leaflet = r => require.ensure([], () => r(require('@/page/leaflet')), 'leaflet');
 
 const routes = [
 	{
@@ -14,6 +15,11 @@ const routes = [
 	{
 		path: '/home',
 		component: home,
+		meta:{auth:true}
+	},
+	{
+		path: '/leaflet',
+		component: leaflet,
 		meta:{auth:true}
 	},
 ]
