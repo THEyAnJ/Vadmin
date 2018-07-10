@@ -5,6 +5,13 @@ import store from './store/'
 import ElementUI from 'element-ui'
 import { Message } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css'
+// fontawesome图标🆒全局植入
+import { library } from '@fortawesome/fontawesome-svg-core'
+// https://fontawesome.com/icons?d=gallery&s=solid
+import { faCoffee,faAmbulance } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+library.add(faCoffee,faAmbulance)
+Vue.component('icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false;
 

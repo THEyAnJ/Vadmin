@@ -6,45 +6,45 @@
     <el-container class="main_container">
       <el-aside :style="asideStyle">
         <el-menu router>
-          <el-menu-item v-for="item in menu" :index=item.path><i class="el-icon-menu"></i>{{item.title}}</el-menu-item>
+          <el-menu-item v-for="item in menu" :index=item.path>
+            <icon icon="ambulance"/>
+            {{collapse ? null : item.title}}
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-main>
-        <userInfo :userInfo="userInfo"></userInfo>
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
       </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
-import {mapState} from 'vuex'
 export default {
   components: {
-    userInfo: () => import('../components/home/userInfo'),
+    
   },
   data () {
     return {
-      menu:[],
       collapse:false
     }
   },
   computed: {
-    ...mapState({
-      userInfo:state => state.userInfo
-    }),
     asideStyle () {
       return {
         width: `${this.collapse ? '60' : '200'}px`
       }
+    },
+    menu(){
+      return new Array(20).fill({
+        title:"导航",
+        path:"link"
+      })
     }
   },
-  mounted(){
-    let menu=new Array(20).fill({
-        title:"导航",
-        path:"home"
-      })
-    this.menu.push(...menu)
-  },
+  mounted(){},
   methods: {
     toggleAside(){
       this.collapse=!this.collapse
