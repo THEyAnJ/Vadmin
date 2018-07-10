@@ -5,6 +5,7 @@ Vue.use(Router)
 
 const login = r => require.ensure([], () => r(require('@/page/login')), 'login');
 const home = r => require.ensure([], () => r(require('@/page/home')), 'home');
+const chinamap = r => require.ensure([], () => r(require('@/page/chinamap')), 'chinamap');
 
 const routes = [
 	{
@@ -14,6 +15,11 @@ const routes = [
 	{
 		path: '/home',
 		component: home,
+		meta:{auth:true}
+	},
+	{
+		path: '/chinamap',
+		component: chinamap,
 		meta:{auth:true}
 	},
 ]

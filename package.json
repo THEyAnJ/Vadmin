@@ -32,6 +32,7 @@
   "homepage": "https://github.com/Leooman/Vadmin#readme",
   "dependencies": {
     "axios": "^0.18.0",
+    "echarts": "^4.1.0",
     "element-ui": "^2.4.3",
     "particles.js": "^2.0.0",
     "vue": "^2.2.6",

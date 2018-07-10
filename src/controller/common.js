@@ -152,7 +152,7 @@ export const showBack = callback => {
  * @param {string}      mode      运动模式，可选
  * @param {function}    callback  可选，回调函数，链式动画
  */
-export const animate = (element, target, duration = 400, mode = 'ease-out', callback) => {
+export const animate = (element, target, duration = 400, mode = 'linear', callback) => {
     clearInterval(element.timer);
 
     //判断不同参数的情况
@@ -173,7 +173,8 @@ export const animate = (element, target, duration = 400, mode = 'ease-out', call
     //获取dom样式
     const attrStyle = attr => {
         if (attr === "opacity") { 
-            return Math.round(getStyle(element, attr, 'float') * 100);
+            // return Math.round(getStyle(element, attr, 'float') * 100);
+            return getStyle(element, attr, 'float');
         } else {
             return getStyle(element, attr);
         }
@@ -206,7 +207,7 @@ export const animate = (element, target, duration = 400, mode = 'ease-out', call
 
     let flag = true; //假设所有运动到达终点
     const remberSpeed = {};//记录上一个速度值,在ease-in模式下需要用到
-    element.timer = setInterval(() => {
+    return element.timer = setInterval(() => {
         Object.keys(target).forEach(attr => {
             let iSpeed = 0;  //步长
             let status = false; //是否仍需运动
@@ -233,7 +234,6 @@ export const animate = (element, target, duration = 400, mode = 'ease-out', call
             }
             if (mode !== 'ease-in') {
                 iSpeed = (target[attr] - speedBase) / intervalTime;
-                iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed);
             }
             //判断是否达步长之内的误差距离，如果到达说明到达目标点
             switch(mode){
@@ -241,7 +241,7 @@ export const animate = (element, target, duration = 400, mode = 'ease-out', call
                     status = iCurrent != target[attr]; 
                     break;
                 case 'linear':
-                    status = Math.abs(Math.abs(iCurrent) - Math.abs(target[attr])) > Math.abs(iSpeed);
+                    status = target[attr]-iCurrent;
                     break;
                 case 'ease-in':
                     status = Math.abs(Math.abs(iCurrent) - Math.abs(target[attr])) > Math.abs(iSpeed);
@@ -254,12 +254,16 @@ export const animate = (element, target, duration = 400, mode = 'ease-out', call
                 flag = false; 
                 //opacity 和 scrollTop 需要特殊处理
                 if (attr === "opacity") {
-                    element.style.filter = "alpha(opacity:" + (iCurrent + iSpeed) + ")";
-                    element.style.opacity = (iCurrent + iSpeed) / 100;
+                    element.style.filter = "alpha(opacity:" + (iCurrent + iSpeed)*100 + ")";
+                    element.style.opacity = (iCurrent + iSpeed);
                 } else if (attr === 'scrollTop') {
                     element.scrollTop = iCurrent + iSpeed;
                 }else{
-                    element.style[attr] = iCurrent + iSpeed + 'px';
+                    if(status < iSpeed){
+                        element.style[attr] = iCurrent + status + 'px';
+                    }else{
+                        element.style[attr] = iCurrent + iSpeed + 'px';
+                    }
                 }
             } else {
                 flag = true;
